@@ -1,5 +1,3 @@
-!dummy
-!.gitmodule
 composer.phar
 /vendor/
 *.cache
@@ -21,3 +19,5 @@ composer.phar
 /reports/*
 .idea
 vagrant
+!dummy
+!.gitmodule
