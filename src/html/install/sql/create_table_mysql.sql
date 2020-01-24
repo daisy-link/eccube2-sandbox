@@ -1242,5 +1242,9 @@ CREATE INDEX dtb_mobile_ext_session_id_param_value_key ON dtb_mobile_ext_session
 CREATE INDEX dtb_mobile_ext_session_id_url_key ON dtb_mobile_ext_session_id (url(255));
 CREATE INDEX dtb_mobile_ext_session_id_create_date_key ON dtb_mobile_ext_session_id (create_date);
 
+-- 2020/1/23
+ALTER TABLE dtb_products ADD comment7 TEXT;
+ALTER TABLE dtb_products ADD pre_flg TEXT;
 
-ALTER TABLE product ADD material TEXT;
+-- 2020/1/24
+ALTER TABLE dtb_products ADD material TEXT;
