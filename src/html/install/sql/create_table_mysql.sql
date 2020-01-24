@@ -1243,3 +1243,4 @@ CREATE INDEX dtb_mobile_ext_session_id_url_key ON dtb_mobile_ext_session_id (url
 CREATE INDEX dtb_mobile_ext_session_id_create_date_key ON dtb_mobile_ext_session_id (create_date);
 
 
+ALTER TABLE product ADD material TEXT;
