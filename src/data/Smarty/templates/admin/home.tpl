@@ -71,6 +71,18 @@
                     <td><!--{$customer_cnt|default:"0"|n2s}-->名</td>
                 </tr>
                 <tr>
+                    <th>今日の売上高</th>
+                    <td><!--{$order_today_amount|default:"0"|n2s}-->円</td>
+                </tr>
+                <tr>
+                    <th>今日のやきそばの売上</th>
+                    <td><!--{$order_yakisoba_today_amount|default:"0"|n2s}-->円</td>
+                </tr>
+                <tr>
+                    <th>今日のやきそばの売上件数</th>
+                    <td><!--{$order_yakisoba_today_cnt|default:"0"|n2s}-->件</td>
+                </tr>
+                <tr>
                     <th>昨日の売上高</th>
                     <td><!--{$order_yesterday_amount|default:"0"|n2s}-->円</td>
                 </tr>

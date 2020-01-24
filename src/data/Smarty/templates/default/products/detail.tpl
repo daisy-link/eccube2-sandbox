@@ -94,6 +94,17 @@
 
                 <!--★商品名★-->
                 <h2><!--{$arrProduct.name|h}--></h2>
+                <!--原材料-->
+                <!--{if isset($arrProduct.material|smarty:nodefaults)}-->
+                <dl class="normal_price">
+                    <dt><!--{$smarty.const.MATERIALS_TITLE}-->：</dt>
+                    <dd class="price">
+                            <span id="price01_default"><!--{strip}-->
+                                <!--{$arrProduct.material}-->
+                                <!--{/strip}--></span><span id="price01_dynamic"></span>
+                    </dd>
+                </dl>
+                <!--{/if}-->
 
                 <!--★通常価格★-->
                 <!--{if $arrProduct.price01_min_inctax > 0}-->
@@ -178,6 +189,11 @@
 
                 <!--★詳細メインコメント★-->
                 <div class="main_comment"><!--{$arrProduct.main_comment|nl2br_html}--></div>
+                <!--★注意書き★-->
+                <!--{$arrProduct.comment7|h}-->
+
+                <!--★代引きの可否★-->
+                <!--{if $arrProduct.pre_flg == 1}-->プレゼント包装 可<!--{/if}-->
 
                 <!--▼買い物カゴ-->
                 <div class="cart_area clearfix">

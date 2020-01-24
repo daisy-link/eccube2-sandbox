@@ -663,6 +663,9 @@ __EOS__;
                 dtb_products_class.classcategory_id1,
                 dtb_products_class.classcategory_id2 AS parent_classcategory_id, /* 削除 */
                 dtb_products_class.classcategory_id2,
+
+                
+ 
                 Tcc1.class_id as class_id,
                 Tcc1.name as classcategory_name,
                 Tcc2.class_id as parent_class_id,

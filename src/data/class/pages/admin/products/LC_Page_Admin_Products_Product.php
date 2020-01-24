@@ -355,6 +355,13 @@ class LC_Page_Admin_Products_Product extends LC_Page_Admin_Products_Ex
             $objFormParam->addParam('save_sub_large_image' . $cnt, 'save_sub_large_image' . $cnt, '', '', array());
             $objFormParam->addParam('temp_sub_image' . $cnt, 'temp_sub_image' . $cnt, '', '', array());
             $objFormParam->addParam('temp_sub_large_image' . $cnt, 'temp_sub_large_image' . $cnt, '', '', array());
+            //ここから 2020/1/23
+            $objFormParam->addParam('注意書き', 'comment7', STEXT_LEN, 'KVa', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
+            $objFormParam->addParam('プレゼント包装の可否', 'pre_flg', STEXT_LEN, 'n', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
+//            ここまで項目追加
+//            ここから 2020/1/24
+            $objFormParam->addParam('原材料', 'material', SMTEXT_LEN, 'KVa', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
+//            ここまで項目追加
         }
 
         for ($cnt = 1; $cnt <= RECOMMEND_PRODUCT_MAX; $cnt++) {
@@ -1005,6 +1012,12 @@ __EOF__;
                             'main_list_comment', 'main_comment',
                             'deliv_fee', 'comment1', 'comment2', 'comment3',
                             'comment4', 'comment5', 'comment6',
+                            //ここから 2020/1/23
+                            'comment7', 'pre_flg',
+//                            ここまで項目追加
+                            //ここから 2020/1/24
+                            'material',
+                            //ここまで項目追加
                             'sale_limit', 'deliv_date_id', 'maker_id', 'note');
         $arrList = SC_Utils_Ex::arrayDefineIndexes($arrList, $checkArray);
 
@@ -1019,6 +1032,13 @@ __EOF__;
         $sqlval['comment4'] = $arrList['comment4'];
         $sqlval['comment5'] = $arrList['comment5'];
         $sqlval['comment6'] = $arrList['comment6'];
+//        ここから 2020/1/23
+        $sqlval['comment7'] = $arrList['comment7'];
+        $sqlval['pre_flg'] = $arrList['pre_flg'];
+//        ここまで項目追加
+        //ここから 2020/1/24
+        $sqlval['material'] = $arrList['material'];
+        //ここまで項目追加
         $sqlval['deliv_date_id'] = $arrList['deliv_date_id'];
         $sqlval['maker_id'] = $arrList['maker_id'];
         $sqlval['note'] = $arrList['note'];

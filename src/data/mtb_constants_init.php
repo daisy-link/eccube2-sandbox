@@ -486,3 +486,6 @@ define('PENDING_ORDER_CANCEL_TIME', 900);
 define('PENDING_ORDER_CANCEL_FLAG', true);
 /** API機能を有効にする(true:する false:しない) */
 define('API_ENABLE_FLAG', false);
+//2020/1/24 追加
+/** 原材料 */
+define('MATERIALS_TITLE', "原材料");

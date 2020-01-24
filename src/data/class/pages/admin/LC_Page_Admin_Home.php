@@ -72,6 +72,15 @@ class LC_Page_Admin_Home extends LC_Page_Admin_Ex
         // 現在の会員数
         $this->customer_cnt = $this->lfGetCustomerCnt();
 
+        //今日の売上高
+        $this->order_today_amount = $this->lfGetOrderToday('SUM');
+
+        //今日のやきそばの売上高
+        $this->order_yakisoba_today_amount = $this->lfGetYakisobaOrderToday('SUM');
+
+        //今日のやきそばの売上件数
+        $this->order_yakisoba_today_cnt = $this->lfGetYakisobaOrderToday('COUNT');
+
         // 昨日の売上高
         $this->order_yesterday_amount = $this->lfGetOrderYesterday('SUM');
 
@@ -138,6 +147,36 @@ class LC_Page_Admin_Home extends LC_Page_Admin_Ex
         $where = 'del_flg = 0 AND status = 2';
 
         return $objQuery->get($col, $table, $where);
+    }
+
+    /**
+     * 今日の売上データの取得
+     * @param $method
+     * @return mixed
+     */
+    public function lfGetOrderToday($method)
+    {
+        $objQuery =& SC_Query_Ex::getSingletonInstance();
+
+        // TODO: DBFactory使わないでも共通化できそうな気もしますが
+        $dbFactory = SC_DB_DBFactory_Ex::getInstance();
+        $sql = $dbFactory->getOrderTodaySql($method);
+
+        return $objQuery->getOne($sql);
+    }
+
+    /**
+     * 今日の焼きそばの売上データの取得
+     */
+    public function lfGetYakisobaOrderToday($method)
+    {
+        $objQuery =& SC_Query_Ex::getSingletonInstance();
+
+        // TODO: DBFactory使わないでも共通化できそうな気もしますが
+        $dbFactory = SC_DB_DBFactory_Ex::getInstance();
+        $sql = $dbFactory->getYakisobaOrderTodaySql($method);
+
+        return $objQuery->getOne($sql);
     }
 
     /**

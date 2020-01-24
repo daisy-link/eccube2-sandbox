@@ -149,6 +149,14 @@
             </td>
         </tr>
         <tr>
+            <th>原材料</th>
+            <td>
+                <span class="attention"><!--{$arrErr.material}--></span>
+                <textarea name="material" cols="60" rows="8" class="area60" maxlength="<!--{$smarty.const.SMTEXT_LEN}-->" style="<!--{$arrErr.comment3|sfGetErrorColor}-->"><!--{"\n"}--><!--{$arrForm.material|h}--></textarea><br />
+                <span class="attention"> (上限<!--{$smarty.const.SMTEXT_LEN}-->文字)</span>
+            </td>
+        </tr>
+        <tr>
             <th>公開・非公開<span class="attention"> *</span></th>
             <td>
                 <!--{html_radios name="status" options=$arrDISP selected=$arrForm.status separator='&nbsp;&nbsp;'}-->
@@ -316,6 +324,22 @@
                 <span class="attention"><!--{$arrErr.main_comment}--></span>
                 <textarea name="main_comment" maxlength="<!--{$smarty.const.LLTEXT_LEN}-->" style="<!--{if $arrErr.main_comment != ""}-->background-color: <!--{$smarty.const.ERR_COLOR}-->;<!--{/if}-->" cols="60" rows="8" class="area60"><!--{"\n"}--><!--{$arrForm.main_comment|h}--></textarea><br />
                 <span class="attention"> (上限<!--{$smarty.const.LLTEXT_LEN}-->文字)</span>
+            </td>
+        </tr>
+        <tr>
+            <th>注意書き<span class="attention">　</span></th>
+            <td>
+                <span class="attention"><!--{$arrErr.comment7}--></span>
+                <input type="text" name="comment7" value="<!--{$arrForm.comment7|h}-->" maxlength="<!--{$smarty.const.STEXT_LEN}-->" style="<!--{if $arrErr.comment7 != ""}-->background-color: <!--{$smarty.const.ERR_COLOR}-->;<!--{/if}-->" size="60" class="box60" />
+                <span class="attention"> (上限<!--{$smarty.const.STEXT_LEN}-->文字)</span>
+            </td>
+        </tr>
+
+        <tr>
+            <th>プレゼント包装の可否<span class="attention"> </span></th>
+            <td>
+                <span class="attention"><!--{$arrErr.pre_flg}--></span>
+                <label><input type="checkbox" name="pre_flg" value="1" <!--{if $arrForm.pre_flg == 1}-->checked="checked"<!--{/if}--> />プレゼント包装 可</label>
             </td>
         </tr>
         <tr>

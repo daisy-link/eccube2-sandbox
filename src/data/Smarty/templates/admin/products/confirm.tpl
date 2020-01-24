@@ -66,6 +66,12 @@
             </td>
         </tr>
         <tr>
+            <th>原材料</th>
+            <td>
+                <!--{$arrForm.material|h}-->
+            </td>
+        </tr>
+        <tr>
             <th>公開・非公開</th>
             <td>
                 <!--{$arrDISP[$arrForm.status]}-->
@@ -203,6 +209,19 @@
                 <!--{$arrForm.main_comment|nl2br_html}-->
             </td>
         </tr>
+
+        <tr>
+            <th>注意書き</th>
+            <td><!--{$arrForm.comment7|h}--></td>
+        </tr>
+
+        <tr>
+            <th>プレゼント包装の可否</th>
+            <td>
+                <!--{if strlen($arrForm.pre_flg) >= 1}--><!--{$arrForm.pre_flg|h}--><!--{/if}-->
+            </td>
+        </tr>
+
         <tr>
             <th>一覧-メイン画像</th>
             <td>

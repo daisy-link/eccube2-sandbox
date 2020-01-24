@@ -45,6 +45,10 @@
                     <td><!--{$arrForm.kana01.value|h}-->　<!--{$arrForm.kana02.value|h}--></td>
                 </tr>
                 <tr>
+                    <th>趣味</th>
+                    <td><!--{$arrForm.hobby.value|h}--></td>
+                </tr>
+                <tr>
                     <th>郵便番号</th>
                     <td>
                         <!--{if strlen($arrForm.zip01.value) > 0 && strlen($arrForm.zip02.value) > 0}-->

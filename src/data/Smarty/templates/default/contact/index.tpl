@@ -50,6 +50,14 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>趣味<span class="attention">※</span></th>
+                    <td>
+                        <span class="attention"><!--{$arrErr.hobby}--></span>
+                        趣味&nbsp;<input type="text" class="box120" name="hobby" value="<!--{$arrForm.hobby.value|default:$arrData.hobby|h}-->" maxlength="<!--{$smarty.const.STEXT_LEN}-->" style="<!--{$arrErr.hobby|sfGetErrorColor}-->; ime-mode: active;" />　
+
+                    </td>
+                </tr>
+                <tr>
                     <th>郵便番号</th>
                     <td>
                         <span class="attention"><!--{$arrErr.zip01}--><!--{$arrErr.zip02}--></span>

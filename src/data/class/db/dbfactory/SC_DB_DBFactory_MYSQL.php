@@ -87,6 +87,26 @@ class SC_DB_DBFactory_MYSQL extends SC_DB_DBFactory
         return $arrRet;
     }
 
+    public function getOrderTodaySql($method)
+    {
+        return 'SELECT ' . $method . '(total) FROM dtb_order '
+            . 'WHERE del_flg = 0 '
+            . 'AND cast(create_date as date) = DATE_ADD(current_date, interval 0 day) '
+            . 'AND status <> ' . ORDER_CANCEL;
+    }
+
+    public function getYakisobaOrderTodaySql($method)
+    {
+        return 'SELECT ' . $method . '(price * 1.08) FROM dtb_order_detail '
+            . 'INNER JOIN dtb_order '
+            . 'ON dtb_order_detail.order_id = dtb_order.order_id '
+            . 'WHERE del_flg = 0 '
+            . 'AND product_code LIKE \'yakisoba%\' '
+            . 'AND cast(create_date as date) = DATE_ADD(current_date, interval 0 day) '
+            . 'AND status <> ' . ORDER_CANCEL;
+    }
+
+
     /**
      * 昨日の売上高・売上件数を算出する SQL を返す.
      *

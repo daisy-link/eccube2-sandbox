@@ -68,6 +68,11 @@
                     <!--{/if}-->
                 </p>
             </div>
+            <div class="point_announce clearfix">
+                <p>郵便番号 ／&nbsp
+                    <span class="user_name"><!--{$CustomerZip1}--> <!--{$CustomerZip2|h}--></span>
+                </p>
+            </div>
         <!--{/if}-->
         <!--▲現在のポイント-->
     <!--{/strip}-->

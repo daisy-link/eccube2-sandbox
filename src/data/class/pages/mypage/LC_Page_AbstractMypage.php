@@ -86,8 +86,27 @@ class LC_Page_AbstractMypage extends LC_Page_Ex
             $this->CustomerName1 = $objCustomer->getValue('name01');
             $this->CustomerName2 = $objCustomer->getValue('name02');
             $this->CustomerPoint = $objCustomer->getValue('point');
+            $zip1 = new SC_Query();
+            $col = 'zip01';
+            $table = 'dtb_customer';
+            $where = 'customer_id = ?';
+            $customer_id = $_SESSION['customer']['customer_id'];
+
+            $zip1 = $zip1->get($col, $table, $where, [$customer_id]);
+            $this->CustomerZip1 = $zip1;
+//            foreach($zip1 as $zip => $z){
+//                foreach($z as $za => $zb){
+//                    $this->CustomerZip1 = $zb;
+//                }
+//            }
+            $zip2 = new SC_Query();
+            $zip2 = $zip2->getOne('SELECT zip02 FROM dtb_customer WHERE customer_id = ?;', [$customer_id]);
+            print_r($zip2);
+            $this->CustomerZip2 = $zip2;
+
             $this->action();
         }
+
 
         $this->sendResponse();
     }
