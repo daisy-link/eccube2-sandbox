@@ -1,4 +1,4 @@
-
+<?php
 /*
  * This file is part of EC-CUBE
  *
@@ -21,18 +21,37 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-require_once CLASS_REALDIR . 'helper/SC_Helper_BestProducts.php';
+require_once CLASS_REALDIR . 'pages/frontparts/bloc/LC_Page_FrontParts_Bloc_Clock.php';
 
 /**
- * おすすめ商品を管理するヘルパークラス(拡張).
+ * Calendar のページクラス(拡張).
  *
- * LC_Helper_Recommend をカスタマイズする場合はこのクラスを編集する.
+ * LC_Page_FrontParts_Bloc_Calendar をカスタマイズする場合はこのクラスを編集する.
  *
- * @package Helper
- * @author pineray
- * @version $Id:$
+ * @package Page
+ * @author LOCKON CO.,LTD.
+ * @version $ $
  */
-class SC_Helper_BestProducts_Ex extends SC_Helper_BestProducts
+class LC_Page_FrontParts_Bloc_Clock_Ex extends LC_Page_FrontParts_Bloc_Clock
 {
-    //put your code here
+    /**
+     * Page を初期化する.
+     *
+     * @return void
+     */
+    function init()
+    {
+        parent::init();
+    }
+
+    /**
+     * Page のプロセス.
+     *
+     * @return void
+     */
+    function process()
+    {
+        parent::process();
+//        $this->clock = date("Y/m/d H:i:s");
+    }
 }

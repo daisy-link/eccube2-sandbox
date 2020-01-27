@@ -1,5 +1,4 @@
-
-/*
+<!--{*
  * This file is part of EC-CUBE
  *
  * Copyright(c) 2000-2014 LOCKON CO.,LTD. All Rights Reserved.
@@ -19,20 +18,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+ *}-->
 
-require_once CLASS_REALDIR . 'helper/SC_Helper_BestProducts.php';
+<!--{strip}-->
+<div class="block_outer">
+    <div id="news_area">
+        <h2>バナー情報</h2>
 
-/**
- * おすすめ商品を管理するヘルパークラス(拡張).
- *
- * LC_Helper_Recommend をカスタマイズする場合はこのクラスを編集する.
- *
- * @package Helper
- * @author pineray
- * @version $Id:$
- */
-class SC_Helper_BestProducts_Ex extends SC_Helper_BestProducts
-{
-    //put your code here
-}
+        <div class="block_body">
+            <!--{if is_array($banner)}-->
+                <!--{foreach from=$banner item=banner}-->
+                <div class="news_contents">
+                    <h4><!--{$banner.title}--></h4>
+                </div>
+                <!--{/foreach}-->
+            <!--{else}-->
+            <!--{$banner}-->
+            <!--{/if}-->
+        </div>
+    </div>
+</div>
+<!--{/strip}-->

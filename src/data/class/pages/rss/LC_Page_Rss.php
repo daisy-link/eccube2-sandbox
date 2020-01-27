@@ -70,6 +70,9 @@ class LC_Page_RSS extends LC_Page_Ex
         //店名をセット
         $this->site_title = $arrNews[0]['shop_name'];
 
+        //時間取得
+        $this->clock = date("Y/m/d H:i:s");
+
         //代表Emailアドレスをセット
         $this->email = $arrNews[0]['email'];
 
@@ -78,6 +81,8 @@ class LC_Page_RSS extends LC_Page_Ex
 
         //画面表示
         $objView->display($this->tpl_mainpage, true);
+
+
     }
 
     /**

@@ -1,4 +1,4 @@
-
+<?php
 /*
  * This file is part of EC-CUBE
  *
@@ -21,18 +21,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-require_once CLASS_REALDIR . 'helper/SC_Helper_BestProducts.php';
+require_once realpath(dirname(__FILE__)) . '/../../require.php';
+require_once CLASS_EX_REALDIR . 'page_extends/frontparts/bloc/LC_Page_FrontParts_Bloc_Banner_Ex.php';
 
-/**
- * おすすめ商品を管理するヘルパークラス(拡張).
- *
- * LC_Helper_Recommend をカスタマイズする場合はこのクラスを編集する.
- *
- * @package Helper
- * @author pineray
- * @version $Id:$
- */
-class SC_Helper_BestProducts_Ex extends SC_Helper_BestProducts
-{
-    //put your code here
-}
+$objPage = new LC_Page_FrontParts_Bloc_Banner_Ex();
+$objPage->blocItems = $params['items'];
+$objPage->init();
+$objPage->process();

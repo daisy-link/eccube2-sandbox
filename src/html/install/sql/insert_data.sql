@@ -1546,3 +1546,4 @@ INSERT INTO mtb_country (id, name, rank) VALUES (426,'レソト',246);
 INSERT INTO mtb_country (id, name, rank) VALUES (422,'レバノン',247);
 INSERT INTO mtb_country (id, name, rank) VALUES (638,'レユニオン',248);
 INSERT INTO mtb_country (id, name, rank) VALUES (643,'ロシア|ロシア連邦',249);
+

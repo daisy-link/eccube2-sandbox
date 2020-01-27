@@ -64,8 +64,10 @@ class LC_Page_FrontParts_Bloc_Recommend extends LC_Page_FrontParts_Bloc_Ex
         $objSiteInfo = SC_Helper_DB_Ex::sfGetBasisData();
         $this->arrInfo = $objSiteInfo->data;
 
-        //おすすめ商品表示
+//        おすすめ商品表示
         $this->arrBestProducts = $this->lfGetRanking();
+        //人気商品ランキング表示
+//        $this->arrBestproducts = $this->lfGetPopularRanking();
     }
 
     /**
@@ -74,11 +76,50 @@ class LC_Page_FrontParts_Bloc_Recommend extends LC_Page_FrontParts_Bloc_Ex
      * @return array $arrBestProducts 検索結果配列
      */
     public function lfGetRanking()
+            {
+                $objRecommend = new SC_Helper_BestProducts_Ex();
+
+                // おすすめ商品取得
+                $arrRecommends = $objRecommend->getList(RECOMMEND_NUM);
+
+                $response = array();
+                if (count($arrRecommends) > 0) {
+                    // 商品一覧を取得
+                    $objQuery =& SC_Query_Ex::getSingletonInstance();
+                    $objProduct = new SC_Product_Ex();
+                    // where条件生成&セット
+                    $arrProductId = array();
+                    foreach ($arrRecommends as $key => $val) {
+                        $arrProductId[] = $val['product_id'];
+                    }
+                    $arrProducts = $objProduct->getListByProductIds($objQuery, $arrProductId);
+
+                    // 税込金額を設定する
+                    SC_Product_Ex::setIncTaxToProducts($arrProducts);
+
+            // おすすめ商品情報にマージ
+            foreach ($arrRecommends as $key => $value) {
+                if (isset($arrProducts[$value['product_id']])) {
+                    $product = $arrProducts[$value['product_id']];
+                    if ($product['status'] == 1 && (!NOSTOCK_HIDDEN || ($product['stock_max'] >= 1 || $product['stock_unlimited_max'] == 1))) {
+                        $response[] = array_merge($value, $arrProducts[$value['product_id']]);
+                    }
+                } else {
+                    // 削除済み商品は除外
+                    unset($arrRecommends[$key]);
+                }
+            }
+        }
+
+        return $response;
+    }
+
+    public function lfGetPopularRanking()
     {
         $objRecommend = new SC_Helper_BestProducts_Ex();
 
         // おすすめ商品取得
-        $arrRecommends = $objRecommend->getList(RECOMMEND_NUM);
+        $arrRecommends = $objRecommend->getPopularList(RECOMMEND_NUM);
 
         $response = array();
         if (count($arrRecommends) > 0) {
@@ -112,3 +153,5 @@ class LC_Page_FrontParts_Bloc_Recommend extends LC_Page_FrontParts_Bloc_Ex
         return $response;
     }
 }
+
+

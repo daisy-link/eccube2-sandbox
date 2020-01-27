@@ -100,7 +100,7 @@
                     <dt><!--{$smarty.const.MATERIALS_TITLE}-->：</dt>
                     <dd class="price">
                             <span id="price01_default"><!--{strip}-->
-                                <!--{$arrProduct.material}-->
+                                <!--{$arrProduct.material|h|nl2br}-->
                                 <!--{/strip}--></span><span id="price01_dynamic"></span>
                     </dd>
                 </dl>

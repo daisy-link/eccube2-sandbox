@@ -1,4 +1,4 @@
-
+<?php
 /*
  * This file is part of EC-CUBE
  *
@@ -21,7 +21,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-require_once CLASS_REALDIR . 'helper/SC_Helper_BestProducts.php';
+require_once CLASS_REALDIR . 'helper/SC_Helper_Banner.php';
 
 /**
  * おすすめ商品を管理するヘルパークラス(拡張).
@@ -32,7 +32,7 @@ require_once CLASS_REALDIR . 'helper/SC_Helper_BestProducts.php';
  * @author pineray
  * @version $Id:$
  */
-class SC_Helper_BestProducts_Ex extends SC_Helper_BestProducts
+class SC_Helper_Banner_Ex extends SC_Helper_Banner
 {
     //put your code here
 }

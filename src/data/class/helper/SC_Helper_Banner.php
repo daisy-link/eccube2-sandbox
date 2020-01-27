@@ -28,7 +28,7 @@
  * @author pineray
  * @version $Id:$
  */
-class SC_Helper_BestProducts
+class SC_Helper_Banner
 {
     /**
      * おすすめ商品の情報を取得.
@@ -148,7 +148,7 @@ class SC_Helper_BestProducts
             $sqlval['create_date'] = 'CURRENT_TIMESTAMP';
             $sqlval['best_id'] = $objQuery->nextVal('dtb_best_products_best_id');
             $ret = $objQuery->insert('dtb_best_products', $sqlval);
-        // 既存編集
+            // 既存編集
         } else {
             unset($sqlval['creator_id']);
             unset($sqlval['create_date']);

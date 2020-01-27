@@ -1,5 +1,4 @@
-
-/*
+<!--{*
  * This file is part of EC-CUBE
  *
  * Copyright(c) 2000-2014 LOCKON CO.,LTD. All Rights Reserved.
@@ -19,20 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+ *}-->
 
-require_once CLASS_REALDIR . 'helper/SC_Helper_BestProducts.php';
+<!--{strip}-->
+<div class="block_outer">
+    <div id="news_area">
+        <h2><img src="<!--{$TPL_URLPATH}-->img/title/tit_bloc_news.png" alt="新着情報" /><span class="rss"><a href="<!--{$smarty.const.ROOT_URLPATH}-->rss/<!--{$smarty.const.DIR_INDEX_PATH}-->" target="_blank"><img src="<!--{$TPL_URLPATH}-->img/button/btn_rss.jpg" alt="RSS" /></a></span></h2>
 
-/**
- * おすすめ商品を管理するヘルパークラス(拡張).
- *
- * LC_Helper_Recommend をカスタマイズする場合はこのクラスを編集する.
- *
- * @package Helper
- * @author pineray
- * @version $Id:$
- */
-class SC_Helper_BestProducts_Ex extends SC_Helper_BestProducts
-{
-    //put your code here
-}
+        <div class="block_body">
+            <div class="news_contents">
+                <h4><!--{$clock|h}--></h4>
+            </div>
+        </div>
+    </div>
+</div>
+<!--{/strip}-->
