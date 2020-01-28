@@ -24,7 +24,7 @@
 require_once CLASS_EX_REALDIR . 'page_extends/admin/LC_Page_Admin_Ex.php';
 
 /**
- * おすすめ商品管理 のページクラス.
+ * コンテンツ管理 のページクラス.
  *
  * @package Page
  * @author LOCKON CO.,LTD.
@@ -40,13 +40,24 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
     public function init()
     {
         parent::init();
+//        $this->tpl_mainpage = 'contents/index.tpl';
         $this->tpl_mainpage = 'contents/banner.tpl';
+//        $this->tpl_subno = 'index';
+        $this->tpl_subno = 'banner';
         $this->tpl_mainno = 'contents';
-        $this->tpl_subno = 'recommend';
+//        $this->arrForm = array(
+//            'year' => date('Y'),
+//            'month' => date('n'),
+//            'day' => date('j'),
+//        );
         $this->tpl_maintitle = 'コンテンツ管理';
-        $this->tpl_subtitle = 'おすすめ商品管理';
-        //最大登録数の表示
-        $this->tpl_disp_max = RECOMMEND_NUM;
+//        $this->tpl_subtitle = '新着情報管理';
+        $this->tpl_subtitle = 'バナー管理';
+        //---- 日付プルダウン設定
+//        $objDate = new SC_Date_Ex(ADMIN_NEWS_STARTYEAR);
+//        $this->arrYear = $objDate->getYear();
+//        $this->arrMonth = $objDate->getMonth();
+//        $this->arrDay = $objDate->getDay();
     }
 
     /**
@@ -67,82 +78,89 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
      */
     public function action()
     {
+//        $objNews = new SC_Helper_News_Ex();
+        $objBanner = new SC_Helper_Banner_Ex();
+
         $objFormParam = new SC_FormParam_Ex();
         $this->lfInitParam($objFormParam);
         $objFormParam->setParam($_POST);
         $objFormParam->convParam();
-        $arrPost = $objFormParam->getHashArray();
 
-        $objRecommend = new SC_Helper_Banner_Ex();
+        $banner_id = $objFormParam->getValue('id');
 
+        //---- 新規登録/編集登録
         switch ($this->getMode()) {
-            case 'down': //商品の並び替えをする。
-                $objRecommend->rankDown($arrPost['best_id']);
-                $arrItems = $this->getRecommendProducts($objRecommend);
-                break;
+            case 'edit':
+                $this->arrErr = $this->lfCheckError($objFormParam);
+                if (!SC_Utils_Ex::isBlank($this->arrErr['id'])) {
+                    trigger_error('', E_USER_ERROR);
 
-            case 'up': //商品の並び替えをする。
-                $objRecommend->rankUp($arrPost['best_id']);
-                $arrItems = $this->getRecommendProducts($objRecommend);
-                break;
+                    return;
+                }
 
-            case 'regist': // 商品を登録する。
-                $this->arrErr[$arrPost['rank']] = $this->lfCheckError($objFormParam);
-                // 登録処理にエラーがあった場合は商品選択の時と同じ処理を行う。
-                if (SC_Utils_Ex::isBlank($this->arrErr)) {
-                    $member_id = $_SESSION['member_id'];
-                    $this->insertRecommendProduct($arrPost, $member_id, $objRecommend);
-                    $arrItems = $this->getRecommendProducts($objRecommend);
-                    $this->tpl_onload = "window.alert('編集が完了しました');";
-                } else {
-                    $arrItems = $this->getRecommendProducts($objRecommend);
-                    $rank = $arrPost['rank'];
-                    $arrItems[$rank]['comment'] = $arrPost['comment'];;
-                    if ($arrPost['best_id']) {
-                    } else {
-                        $arrItems = $this->setProducts($arrPost, $arrItems);
-                        $this->checkRank = $arrPost['rank'];
+                if (count($this->arrErr) <= 0) {
+                    // POST値の引き継ぎ
+                    $arrParam = $objFormParam->getHashArray();
+                    // 登録実行
+                    $res_banner_id = $this->doRegist($banner_id, $arrParam, $objBanner);
+                    if ($res_banner_id !== FALSE) {
+                        // 完了メッセージ
+                        $banner_id = $res_banner_id;
+                        $this->tpl_onload = "alert('登録が完了しました。');";
                     }
                 }
+                // POSTデータを引き継ぐ
+                $this->tpl_banner_id = $banner_id;
                 break;
-            case 'delete': // 商品を削除する。
-                if ($arrPost['best_id']) {
-                    $this->deleteProduct($arrPost, $objRecommend);
+
+            case 'pre_edit':
+                $banner = $objBanner->getBanner($banner_id);
+//                list($news['year'],$news['month'],$news['day']) = $this->splitNewsDate($news['cast_news_date']);
+                $objFormParam->setParam($banner);
+
+                // POSTデータを引き継ぐ
+                $this->tpl_banner_id = $banner_id;
+                break;
+
+            case 'delete':
+                //----　データ削除
+                $objBanner->deleteNews($banner_id);
+                //自分にリダイレクト（再読込による誤動作防止）
+                SC_Response_Ex::reload();
+                break;
+
+            //----　表示順位移動
+            case 'up':
+                $objBanner->rankUp($banner_id);
+
+                // リロード
+                SC_Response_Ex::reload();
+                break;
+
+            case 'down':
+                $objBanner->rankDown($banner_id);
+
+                // リロード
+                SC_Response_Ex::reload();
+                break;
+
+            case 'moveRankSet':
+                //----　指定表示順位移動
+                $input_pos = $this->getPostRank($banner_id);
+                if (SC_Utils_Ex::sfIsInt($input_pos)) {
+                    $objBanner->moveRank($banner_id, $input_pos);
                 }
-                $arrItems = $this->getRecommendProducts($objRecommend);
-                $this->tpl_onload = "window.alert('削除しました');";
+                SC_Response_Ex::reload();
                 break;
-            case 'set_item': // 商品を選択する。
-                $this->arrErr = $this->lfCheckError($objFormParam);
-                if (SC_Utils_Ex::isBlank($this->arrErr['rank']) && SC_Utils_Ex::isBlank($this->arrErr['product_id'])) {
-                    $arrItems = $this->setProducts($arrPost, $this->getRecommendProducts($objRecommend));
-                    $this->checkRank = $arrPost['rank'];
-                }
-                break;
+
             default:
-                $arrItems = $this->getRecommendProducts($objRecommend);
                 break;
         }
 
-        $this->category_id = intval($arrPost['category_id']);
-        $this->arrItems = $arrItems;
+        $this->arrBanner = $objBanner->getList();
+        $this->line_max = count($this->arrBanner);
 
-        // カテゴリ取得
-        $objDb = new SC_Helper_DB_Ex();
-        $this->arrCatList = $objDb->sfGetCategoryList('level = 1');
-    }
-
-    /**
-     * パラメーターの初期化を行う
-     * @param SC_FormParam_Ex $objFormParam
-     */
-    public function lfInitParam(&$objFormParam)
-    {
-        $objFormParam->addParam('バナータイトル', 'banner_title', STEXT_LEN, 'KVa', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
-        $objFormParam->addParam('バナーURL', 'banner_url', SMTEXT_LEN, 'n', array('EXIST_CHECK', 'MAX_LENGTH_CHECK'));
-        $objFormParam->addParam('リンクウィンドウ設定', 'banner_select', STEXT_LEN, 'n', array('NUM_CHECK', 'MAX_LENGTH_CHECK'));
-        $objFormParam->addParam('バナーランク', 'banner_rank', INT_LEN, 'n', array('EXIST_CHECK', 'NUM_CHECK', 'MAX_LENGTH_CHECK'));
-        $objFormParam->addParam('テキスト', 'banner_text', LTEXT_LEN, 'KVa', array('MAX_LENGTH_CHECK'));
+        $this->arrForm = $objFormParam->getFormParamList();
     }
 
     /**
@@ -154,108 +172,92 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
     {
         $objErr = new SC_CheckError_Ex($objFormParam->getHashArray());
         $objErr->arrErr = $objFormParam->checkError();
+//        $objErr->doFunc(array('日付', 'year', 'month', 'day'), array('CHECK_DATE'));
 
         return $objErr->arrErr;
     }
 
     /**
-     * 既に登録されているバナーの内容を取得する
-     * @param  SC_Helper_BestProducts_Ex $objRecommend
-     * @return Array  $arrReturnProducts データベースに登録されているバナーの配列
+     * パラメーターの初期化を行う
+     * @param SC_FormParam_Ex $objFormParam
      */
-    public function getRecommendProducts(SC_Helper_Banner_Ex &$objRecommend)
+    public function lfInitParam(&$objFormParam)
     {
-        $arrList = $objRecommend->getList();
-        // product_id の一覧を作成
-        $product_ids = array();
-        foreach ($arrList as $value) {
-            $product_ids[] = $value['product_id'];
-        }
-
-        $objProduct = new SC_Product_Ex;
-        $objQuery = $objQuery =& SC_Query_Ex::getSingletonInstance();
-        $arrProducts = $objProduct->getListByProductIds($objQuery, $product_ids);
-
-        $arrReturnProducts = array();
-        foreach ($arrList as $data) {
-            $data['main_list_image'] = $arrProducts[$data['product_id']]['main_list_image'];
-            $data['name'] = $arrProducts[$data['product_id']]['name'];
-            $arrReturnProducts[$data['rank']] = $data;
-        }
-
-        return $arrReturnProducts;
+        $objFormParam->addParam('id', 'id');
+//        $objFormParam->addParam('日付(年)', 'year', INT_LEN, 'n', array('EXIST_CHECK', 'NUM_CHECK', 'MAX_LENGTH_CHECK'));
+//        $objFormParam->addParam('日付(月)', 'month', INT_LEN, 'n', array('EXIST_CHECK', 'NUM_CHECK', 'MAX_LENGTH_CHECK'));
+//        $objFormParam->addParam('日付(日)', 'day', INT_LEN, 'n', array('EXIST_CHECK', 'NUM_CHECK', 'MAX_LENGTH_CHECK'));
+        $objFormParam->addParam('バナータイトル', 'banner_title', STEXT_LEN, 'KVa', array('EXIST_CHECK','MAX_LENGTH_CHECK','SPTAB_CHECK'));
+        $objFormParam->addParam('バナーURL', 'banner_url', URL_LEN, 'KVa', array('MAX_LENGTH_CHECK'));
+        $objFormParam->addParam('バナーテキスト', 'banner_text', LTEXT_LEN, 'KVa', array('MAX_LENGTH_CHECK'));
+        $objFormParam->addParam('別ウィンドウで開く', 'banner_select', INT_LEN, 'n', array('NUM_CHECK', 'MAX_LENGTH_CHECK'));
     }
 
     /**
-     * おすすめ商品の新規登録を行う。
-     * @param Array   $arrPost      POSTの値を格納した配列
-     * @param Integer $member_id    登録した管理者を示すID
-     * @param SC_Helper_BestProducts_Ex  $objRecommend
+     * 登録処理を実行.
+     *
+     * @param  integer  $bannet_id
+     * @param  array    $sqlval
+     * @param  SC_Helper_News_Ex   $objNews
+     * @return multiple
      */
-    public function insertRecommendProduct($arrPost, $member_id, SC_Helper_BestProducts_Ex &$objRecommend)
+    public function doRegist($banner_id, $sqlval, SC_Helper_Banner_Ex $objBanner)
     {
-        $sqlval = array();
-        $sqlval['best_id'] = $arrPost['best_id'];
-        $sqlval['product_id'] = $arrPost['product_id'];
-        $sqlval['category_id'] = $arrPost['category_id'];
-        $sqlval['rank'] = $arrPost['rank'];
-        $sqlval['comment'] = $arrPost['comment'];
-        $sqlval['creator_id'] = $member_id;
+        $sqlval['id'] = $banner_id;
+        $sqlval['creator_id'] = $_SESSION['member_id'];
+        $sqlval['banner_select'] = $this->checkLinkMethod($sqlval['banner_select']);
+//        $sqlval['news_date'] = $this->getRegistDate($sqlval);
+//        unset($sqlval['year'], $sqlval['month'], $sqlval['day']);
 
-        $objRecommend->saveBestProducts($sqlval);
+        return $objBanner->saveBanner($sqlval);
     }
 
     /**
-     * データを削除する
-     * @param  Array  $arrPost      POSTの値を格納した配列
-     * @param  SC_Helper_BestProducts_Ex $objRecommend
-     * @return void
+     * データの登録日を返す。
+     * @param  Array  $arrPost POSTのグローバル変数
+     * @return string 登録日を示す文字列
      */
-    public function deleteProduct($arrPost, SC_Helper_BestProducts_Ex &$objRecommend)
+    public function getRegistDate($arrPost)
     {
-        if ($arrPost['best_id']) {
-            $target = $arrPost['best_id'];
-        } else {
-            $recommend = $objRecommend->getByRank($arrPost['rank']);
-            $target = $recommend['best_id'];
-        }
-        $objRecommend->deleteBestProducts($target);
+        $registDate = $arrPost['year'] .'/'. $arrPost['month'] .'/'. $arrPost['day'];
+
+        return $registDate;
     }
 
     /**
-     * 商品情報を取得する
-     * @param  Integer $product_id 商品ID
-     * @return Array   $return 商品のデータを格納した配列
+     * チェックボックスの値が空の時は無効な値として1を格納する
+     * @param  int $link_method
+     * @return int
      */
-    public function getProduct($product_id)
+    public function checkLinkMethod($link_method)
     {
-        $objProduct = new SC_Product_Ex();
-        $arrProduct = $objProduct->getDetail($product_id);
-        $return = array(
-            'product_id' => $arrProduct['product_id'],
-            'main_list_image' => $arrProduct['main_list_image'],
-            'name' => $arrProduct['name']
-        );
-
-        return $return;
-    }
-
-    /**
-     * 商品のデータを表示用に処理する
-     * @param Array $arrPost  POSTのデータを格納した配列
-     * @param Array $arrItems フロントに表示される商品の情報を格納した配列
-     */
-    public function setProducts($arrPost, $arrItems)
-    {
-        $arrProduct = $this->getProduct($arrPost['product_id']);
-        if (count($arrProduct) > 0) {
-            $rank = $arrPost['rank'];
-            foreach ($arrProduct as $key => $val) {
-                $arrItems[$rank][$key] = $val;
-            }
-            $arrItems[$rank]['rank'] = $rank;
+        if (strlen($link_method) == 0) {
+            $link_method = 1;
         }
 
-        return $arrItems;
+        return $link_method;
+    }
+
+    /**
+     * ニュースの日付の値をフロントでの表示形式に合わせるために分割
+     * @param String $news_date
+     */
+    public function splitNewsDate($news_date)
+    {
+        return explode('-', $news_date);
+    }
+
+    /**
+     * POSTされたランクの値を取得する
+     * @param Integer $news_id
+     */
+    public function getPostRank($news_id)
+    {
+        if (strlen($news_id) > 0 && is_numeric($news_id) == true) {
+            $key = 'pos-' . $news_id;
+            $input_pos = $_POST[$key];
+
+            return $input_pos;
+        }
     }
 }

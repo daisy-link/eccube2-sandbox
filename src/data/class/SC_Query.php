@@ -564,7 +564,9 @@ class SC_Query
         // 文末の','を削除
         $strcol = rtrim($strcol, ',');
         $strval = rtrim($strval, ',');
+//        $strval = 'dtb_banners';
         $sqlin = "INSERT INTO $table($strcol) SELECT $strval";
+//        $sqlin = "INSERT INTO $table($strcol)";
 
         if (strlen($from) >= 1) {
             $sqlin .= ' ' . $from;
