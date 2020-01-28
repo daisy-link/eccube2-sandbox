@@ -69,11 +69,11 @@ class SC_Helper_Banner
 //        $col = '*, cast(news_date as date) as cast_news_date';
         $col = '*';
         $where = '';
-//        if (!$has_deleted) {
-//            $where .= 'del_flg = 0';
-//        }
+        if (!$has_deleted) {
+            $where .= 'del_flg = 0';
+        }
         $table = 'dtb_banners';
-        $objQuery->setOrder('banner_rank DESC');
+        $objQuery->setOrder('rank DESC');
         if ($dispNumber > 0) {
             if ($pageNumber > 0) {
                 $objQuery->setLimitOffset($dispNumber, (($pageNumber - 1) * $dispNumber));
@@ -101,7 +101,7 @@ class SC_Helper_Banner
         // 新規登録
         if ($banner_id == '') {
             // INSERTの実行
-            $sqlval['banner_rank'] = $objQuery->max('banner_rank', 'dtb_banners') + 1;
+            $sqlval['rank'] = $objQuery->max('rank', 'dtb_banners') + 1;
             $sqlval['id'] = $objQuery->max('id', 'dtb_banners') + 1;
 //            $sqlval['create_date'] = 'CURRENT_TIMESTAMP';
 //            $sqlval['id'] = $objQuery->nextVal('dtb_news_news_id');
@@ -124,11 +124,11 @@ class SC_Helper_Banner
      * @param  integer $news_id ニュースID
      * @return void
      */
-    public function deleteNews($news_id)
+    public function deleteBanner($banner_id)
     {
         $objDb = new SC_Helper_DB_Ex();
         // ランク付きレコードの削除
-        $objDb->sfDeleteRankRecord('dtb_news', 'news_id', $news_id);
+        $objDb->sfDeleteRankRecord('dtb_banners', 'id', $banner_id);
     }
 
     /**
@@ -137,10 +137,10 @@ class SC_Helper_Banner
      * @param  integer $news_id ニュースID
      * @return void
      */
-    public function rankUp($news_id)
+    public function rankUp($banner_id)
     {
         $objDb = new SC_Helper_DB_Ex();
-        $objDb->sfRankUp('dtb_news', 'news_id', $news_id);
+        $objDb->sfRankUp('dtb_banners', 'id', $banner_id);
     }
 
     /**
@@ -149,10 +149,10 @@ class SC_Helper_Banner
      * @param  integer $news_id ニュースID
      * @return void
      */
-    public function rankDown($news_id)
+    public function rankDown($banner_id)
     {
         $objDb = new SC_Helper_DB_Ex();
-        $objDb->sfRankDown('dtb_news', 'news_id', $news_id);
+        $objDb->sfRankDown('dtb_banners', 'id', $banner_id);
     }
 
     /**
@@ -162,10 +162,10 @@ class SC_Helper_Banner
      * @param  integer $rank    移動先の表示順
      * @return void
      */
-    public function moveRank($news_id, $rank)
+    public function moveRank($banner_id, $rank)
     {
         $objDb = new SC_Helper_DB_Ex();
-        $objDb->sfMoveRank('dtb_news', 'news_id', $news_id, $rank);
+        $objDb->sfMoveRank('dtb_banners', 'id', $banner_id, $rank);
     }
 
     /**

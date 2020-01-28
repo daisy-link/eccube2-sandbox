@@ -176,6 +176,12 @@ class SC_Query
         return $this->getAll($sqlse, $arrWhereVal, $fetchmode);
     }
 
+    public function select_column3($col1, $col2, $col3, $from = '', $where = '', $arrWhereVal = array(), $fetchmode = MDB2_FETCHMODE_ASSOC){
+        $sqlse = $this->getSql($col1, $col2, $col3,$from, $where, $arrWhereVal);
+
+        return $this->getAll($sqlse, $arrWhereVal, $fetchmode);
+    }
+
     /**
      * 直前に実行されたSQL文を取得する.
      *
@@ -335,6 +341,35 @@ class SC_Query
         $dbFactory = SC_DB_DBFactory_Ex::getInstance();
 
         $sqlse = "SELECT $cols";
+
+        if (strlen($from) === 0) {
+            $sqlse .= ' ' . $dbFactory->getDummyFromClauseSql();
+        } else {
+            $sqlse .= " FROM $from";
+        }
+
+        // 引数の$whereを優先する。
+        if (strlen($where) >= 1) {
+            $sqlse .= " WHERE $where";
+        } elseif (strlen($this->where) >= 1) {
+            $sqlse .= ' WHERE ' . $this->where;
+            // 実行時と同じくキャストしてから評価する (空文字を要素1の配列と評価させる意図)
+            $arrWhereValForEval = (array) $arrWhereVal;
+            if (empty($arrWhereValForEval)) {
+                $arrWhereVal = $this->arrWhereVal;
+            }
+        }
+
+        $sqlse .= ' ' . $this->groupby . ' ' . $this->order . ' ' . $this->option;
+
+        return $sqlse;
+    }
+
+    public function getSql3($col1, $col2, $col3, $from = '', $where = '', &$arrWhereVal = null)
+    {
+        $dbFactory = SC_DB_DBFactory_Ex::getInstance();
+
+        $sqlse = "SELECT $col1, $col2, $col3";
 
         if (strlen($from) === 0) {
             $sqlse .= ' ' . $dbFactory->getDummyFromClauseSql();
@@ -564,9 +599,9 @@ class SC_Query
         // 文末の','を削除
         $strcol = rtrim($strcol, ',');
         $strval = rtrim($strval, ',');
-//        $strval = 'dtb_banners';
+
         $sqlin = "INSERT INTO $table($strcol) SELECT $strval";
-//        $sqlin = "INSERT INTO $table($strcol)";
+
 
         if (strlen($from) >= 1) {
             $sqlin .= ' ' . $from;

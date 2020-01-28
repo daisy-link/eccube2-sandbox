@@ -82,7 +82,7 @@
         <input type="hidden" name="mode" value="moveRankSet" />
         <input type="hidden" name="id" value="" />
         <input type="hidden" name="moveposition" value="" />
-        <input type="hidden" name="banner_rank" value="" />
+        <input type="hidden" name="rank" value="" />
         <table class="list">
             <col width="10%" />
 
@@ -91,7 +91,7 @@
             <col width="5%" />
             <col width="25%" />
             <tr>
-                <th>順位</th>
+                <th>表示順</th>
                 <th>タイトル</th>
                 <th class="edit">編集</th>
                 <th class="delete">削除</th>
@@ -99,7 +99,7 @@
             </tr>
             <!--{section name=data loop=$arrBanner}-->
             <tr style="background:<!--{if $arrBanner[data].id != $tpl_banner_id}-->#ffffff<!--{else}--><!--{$smarty.const.SELECT_RGB}--><!--{/if}-->;" class="center">
-                <!--{assign var=db_rank value="`$arrBanner[data].banner_rank`"}-->
+                <!--{assign var=db_rank value="`$arrBanner[data].rank`"}-->
                 <td><!--{math equation="$line_max - $db_rank + 1"}--></td>
 
                 <td class="left">

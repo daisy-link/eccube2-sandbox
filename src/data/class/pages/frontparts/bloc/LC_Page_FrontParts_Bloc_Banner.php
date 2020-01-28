@@ -78,9 +78,10 @@ class LC_Page_FrontParts_Bloc_Banner extends LC_Page_FrontParts_Bloc_Ex
     public function lfGetBanner()
     {
         $banner = new SC_Query;
+        $banner->setOrder('rank DESC');
         $this->banner = $banner->select('*', 'dtb_banners');
-        if(!is_array($this->banner)){
-            $banner = $this->banner[0];
+        if($this->banner){
+            $banner = $this->banner;
             return $banner;
         }else{
             $banner = 'バナーの情報が登録されていません。';

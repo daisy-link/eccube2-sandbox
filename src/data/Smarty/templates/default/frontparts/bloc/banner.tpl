@@ -27,11 +27,18 @@
 
         <div class="block_body">
             <!--{if is_array($banner)}-->
-                <!--{foreach from=$banner item=banner}-->
-                <div class="news_contents">
-                    <h4><!--{$banner.title}--></h4>
-                </div>
-                <!--{/foreach}-->
+            <!--{foreach from=$banner item=banner}-->
+            <div class="banner_contents">
+                <a
+                <!--{if $banner.banner_url}--> href="<!--{$banner.banner_url}--> "
+                <!--{if $banner.banner_select eq "2"}--> target="_blank"
+                <!--{/if}-->
+                <!--{/if}-->
+                >
+                <!--{$banner.banner_title|h|nl2br}--></a>
+                <p><!--{$banner.banner_text}--></p>
+            </div>
+            <!--{/foreach}-->
             <!--{else}-->
             <!--{$banner}-->
             <!--{/if}-->

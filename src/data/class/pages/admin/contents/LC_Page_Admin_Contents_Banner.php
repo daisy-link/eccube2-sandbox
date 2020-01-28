@@ -124,7 +124,7 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
 
             case 'delete':
                 //----　データ削除
-                $objBanner->deleteNews($banner_id);
+                $objBanner->deleteBanner($banner_id);
                 //自分にリダイレクト（再読込による誤動作防止）
                 SC_Response_Ex::reload();
                 break;
