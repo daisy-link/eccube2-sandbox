@@ -22,11 +22,73 @@
  */
 *}-->
 
+<script type="text/javascript">
+    // 表示非表示切り替え
+    function lfDispSwitch(id){
+        var obj = document.getElementById(id);
+        if (obj.style.display == 'none') {
+            obj.style.display = '';
+        } else {
+            obj.style.display = 'none';
+        }
+    }
+
+
+
+    // セレクトボックスのリストを移動
+    // (移動元セレクトボックスID, 移動先セレクトボックスID)
+    function fnMoveSelect(select, target) {
+        $('#' + select).children().each(function() {
+            if (this.selected) {
+                $('#' + target).append(this);
+                $(this).attr({selected: false});
+            }
+        });
+        // IE7再描画不具合対策
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf("msie") != -1 && ua.indexOf('msie 6') == -1) {
+            $('#' + select).hide();
+            $('#' + select).show();
+            $('#' + target).hide();
+            $('#' + target).show();
+        }
+    }
+
+    // target の子要素を選択状態にする
+    function selectAll(target) {
+        $('#' + target).children().prop('selected', 'selected');
+    }
+
+    // 商品種別によってダウンロード商品のフォームの表示非表示を切り替える
+    function toggleDownloadFileForms(value) {
+        if (value == '2') {
+            $('.type-download').show('fast');
+        } else {
+            $('.type-download').hide('fast');
+        }
+    }
+
+    $(function(){
+        var form_product_type = $('input[name=product_type_id]');
+        form_product_type.click(function(){
+            toggleDownloadFileForms(form_product_type.filter(':checked').val());
+        });
+        toggleDownloadFileForms(form_product_type.filter(':checked').val());
+    })
+</script>
+
 <div id="admin-contents" class="contents-main">
-    <form name="form1" id="form1" method="post" action="?">
+    <form name="form1" id="form1" method="post" action="?" enctype="multipart/form-data">
         <input type="hidden" name="<!--{$smarty.const.TRANSACTION_ID_NAME}-->" value="<!--{$transactionid}-->" />
-        <input type="hidden" name="mode" value="" />
-        <input type="hidden" name="id" value="<!--{$arrForm.news_id.value|default:$tpl_banner_id|h}-->" />
+        <input type="hidden" name="mode" value="edit" />
+        <input type="hidden" name="image_key" value="" />
+        <input type="hidden" name="id" value="<!--{$arrForm.id.value|default:$tpl_banner_id|h}-->" />
+        <input type="hidden" name="save_main_list_image" value="<!--{$arrForm.save_main_list_image.value|h}-->" />
+
+        <!--{foreach key=key item=item from=$arrForm.arrHidden}-->
+        <input type="hidden" name="<!--{$key}-->" value="<!--{$item|h}-->" />
+        <!--{/foreach}-->
+
 
         <!--{* ▼登録テーブルここから *}-->
         <table>
@@ -48,8 +110,24 @@
                 </td>
             </tr>
             <tr>
-                <th>リンク</th>
+                <th>リンク先URL</th>
                 <td><label><input type="checkbox" name="banner_select" value="2" <!--{if $arrForm.banner_select.value eq 2}--> checked <!--{/if}--> /> 別ウィンドウで開く</label></td>
+            </tr>
+            <tr>
+                <!--{assign var=key value="main_list_image"}-->
+                <th>一覧-メイン画像<br />[<!--{$smarty.const.SMALL_IMAGE_WIDTH}-->×<!--{$smarty.const.SMALL_IMAGE_HEIGHT}-->]</th>
+                <td>
+                    <a name="<!--{$key}-->"></a>
+                    <a name="main_image"></a>
+                    <a name="main_large_image"></a>
+                    <span class="attention"><!--{$arrErr[$key]}--></span>
+                    <!--{if $arrForm.arrFile[$key].filepath != ""}-->
+                    <img src="<!--{$arrForm.arrFile[$key].filepath}-->" alt="<!--{$arrForm.name|h}-->" />　<a href="" onclick=" eccube.setModeAndSubmit('delete_image', 'image_key', '<!--{$key}-->'); return false;">[画像の取り消し]</a><br />
+                    <!--{/if}-->
+                    <input type="file" name="main_list_image" size="40" style="<!--{$arrErr[$key]|sfGetErrorColor}-->" />
+                    <a class="btn-normal" href="javascript:;" name="btn" onclick="; eccube.setModeAndSubmit('upload_image', 'image_key', '<!--{$key}-->'); return false;">アップロード</a>
+                </td>
+                </th>
             </tr>
             <tr>
                 <th>テキスト</th>

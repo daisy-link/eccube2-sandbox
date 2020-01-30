@@ -94,7 +94,8 @@ class SC_Helper_Banner
      */
     public function saveBanner($sqlval)
     {
-        $objQuery =& SC_Query_Ex::getSingletonInstance();
+        $objQuery = SC_Query_Ex::getSingletonInstance();
+        $sqlval = $objQuery->extractOnlyColsOf('dtb_banners', $sqlval);
 
         $banner_id = $sqlval['id'];
 //        $sqlval['update_date'] = 'CURRENT_TIMESTAMP';
