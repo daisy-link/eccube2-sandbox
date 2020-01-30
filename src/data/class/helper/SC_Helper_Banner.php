@@ -116,7 +116,7 @@ class SC_Helper_Banner
             $ret = $objQuery->update('dtb_banners', $sqlval, $where, array($banner_id));
         }
 
-        return ($ret) ? $sqlval['banner_id'] : FALSE;
+        return ($ret) ? $sqlval['id'] : FALSE;
     }
 
     /**

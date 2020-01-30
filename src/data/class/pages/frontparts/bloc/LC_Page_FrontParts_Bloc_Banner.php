@@ -64,6 +64,8 @@ class LC_Page_FrontParts_Bloc_Banner extends LC_Page_FrontParts_Bloc_Ex
 
         // バナー情報取得
         $this->banner = $this->lfGetBanner();
+        // バナー画像保存先url取得
+        $this->banner_image_url = lfGetImageUrl();
     }
 
     /**
@@ -82,12 +84,15 @@ class LC_Page_FrontParts_Bloc_Banner extends LC_Page_FrontParts_Bloc_Ex
         $this->banner = $banner->select('*', 'dtb_banners');
         if($this->banner){
             $banner = $this->banner;
-            return $banner;
         }else{
             $banner = 'バナーの情報が登録されていません。';
             return $banner;
         }
+        return $banner;
+    }
 
+    public function lfGetImageUrl(){
+        $url = '/html/';
     }
 }
 

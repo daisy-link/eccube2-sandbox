@@ -106,6 +106,7 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
                 if (count($this->arrErr) <= 0) {
                     // POST値の引き継ぎ
                     $arrParam = $objFormParam->getHashArray();
+                    $banner = $arrParam;
                     // 登録実行
                     $res_banner_id = $this->doRegist($banner_id, $arrParam, $objBanner);
                     if ($res_banner_id !== false) {
@@ -126,7 +127,7 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
 
                 $banner = $objBanner->getBanner($banner_id);
 //                list($news['year'],$news['month'],$news['day']) = $this->splitNewsDate($news['cast_news_date']);
-                $temp_image_dir1 = glob('../../upload/temp_image/*');
+//                $temp_image_dir1 = glob('../../upload/temp_image/*');
 
 
 //                if ($banner['main_list_image'] && !is_array($banner['main_list_image'], $temp_image_dir1)) {
@@ -186,9 +187,13 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
         $this->line_max = count($this->arrBanner);
 
         $this->arrForm = $objFormParam->getFormParamList();
-        if($mode === 'pre_edit'){
-            $this->arrForm['arrFile'] = ['main_list_image', $banner['main_list_image']];
-            $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/temp_image/' . $banner['main_list_image'];
+        if($mode === 'pre_edit' || $mode === 'edit'){
+            if($banner['main_list_image']){
+                $this->arrForm['arrFile'] = ['main_list_image', $banner['main_list_image']];
+                $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/temp_image/' . $banner['main_list_image'];
+            }else{
+                $this->arrForm['arrFile']['main_list_image']['filepath'] = '';
+            }
         }
 //
 
