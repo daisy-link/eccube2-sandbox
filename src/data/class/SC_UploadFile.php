@@ -146,6 +146,8 @@ class SC_UploadFile
         return $objErr->arrErr[$keyname];
     }
 
+
+
     // アップロードされたダウンロードファイルを保存する。
     public function makeTempDownFile($keyname='down_file')
     {

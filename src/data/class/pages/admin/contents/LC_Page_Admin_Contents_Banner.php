@@ -120,24 +120,27 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
 
             case 'pre_edit':
 
-                $this->lfInitFormParam_UploadImage($objFormParam);
+//                $this->lfInitFormParam_UploadImage($objFormParam);
 
-                $arrForm = $objFormParam->getFormParamList();
+//                $arrForm = $objFormParam->getFormParamList();
+
                 $banner = $objBanner->getBanner($banner_id);
 //                list($news['year'],$news['month'],$news['day']) = $this->splitNewsDate($news['cast_news_date']);
                 $temp_image_dir1 = glob('../../upload/temp_image/*');
 
-                if ($banner['main_list_image'] && !is_array($banner['main_list_image'], $temp_image_dir1)) {
-                    $this->arrErr[$arrForm['image_key']['value']] = $objUpFile->makeTempFile(
-                        $banner['main_list_image'],
-                        IMAGE_RENAME
-                    );
-                }
+
+//                if ($banner['main_list_image'] && !is_array($banner['main_list_image'], $temp_image_dir1)) {
+//                    $this->arrErr[$arrForm['image_key']['value']] = $objUpFile->makeTempFileview(
+//                        'main_list_image',
+//                        IMAGE_RENAME
+//                    );
+//                }
 
                 $objFormParam->setParam($banner);
 
                 // POSTデータを引き継ぐ
                 $this->tpl_banner_id = $banner_id;
+//                $arrForm = $objFormParam->getFormParamList();
                 break;
 
             case 'delete':
@@ -183,6 +186,10 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
         $this->line_max = count($this->arrBanner);
 
         $this->arrForm = $objFormParam->getFormParamList();
+        if($mode === 'pre_edit'){
+            $this->arrForm['arrFile'] = ['main_list_image', $banner['main_list_image']];
+            $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/temp_image/' . $banner['main_list_image'];
+        }
 //
 
         switch ($mode) {
@@ -213,9 +220,11 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
 
                 // 入力画面表示設定
                 $this->arrForm = $this->lfSetViewParam_InputPage($objUpFile, $arrForm);
+//
                 $this->arrBanner = $objBanner->getList();
                 $this->line_max = count($this->arrBanner);
                 $this->tpl_banner_id = $banner_id;
+
 
                 break;
         }
@@ -258,6 +267,13 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
         $objFormParam->addParam('save_main_list_image', 'save_main_list_image', '', '', array());
         $objFormParam->addParam('temp_main_list_image', 'temp_main_list_image', '', '', array());
         $objFormParam->addParam('main_list_image', 'main_list_image', '', '', array());
+
+//        $objFormParam->addParam('save_main_list_image', 'save_main_list_image', '', '', array());
+        $objFormParam->addParam('save_main_image', 'save_main_image', '', '', array());
+        $objFormParam->addParam('save_main_large_image', 'save_main_large_image', '', '', array());
+//        $objFormParam->addParam('temp_main_list_image', 'temp_main_list_image', '', '', array());
+        $objFormParam->addParam('temp_main_image', 'temp_main_image', '', '', array());
+        $objFormParam->addParam('temp_main_large_image', 'temp_main_large_image', '', '', array());
     }
 
     /**
