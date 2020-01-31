@@ -79,7 +79,7 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
      */
     public function action()
     {
-//        $objNews = new SC_Helper_News_Ex();
+        $objImage = new SC_Image();
         $objBanner = new SC_Helper_Banner_Ex();
 
         $objFormParam = new SC_FormParam_Ex();
@@ -106,16 +106,26 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
                 if (count($this->arrErr) <= 0) {
                     // POST値の引き継ぎ
                     $arrParam = $objFormParam->getHashArray();
+                    $banner = $objBanner->getBanner($arrParam['id']);
+                    $arrParam['main_list_image'] = $banner['main_list_image'];
+//                    $save_dir = $_SERVER['DOCUMENT_ROOT'] . '/html/upload/save_image/';
                     // 登録実行
                     $res_banner_id = $this->doRegist($banner_id, $arrParam, $objBanner);
                     if ($res_banner_id !== false) {
                         // 完了メッセージ
                         $banner_id = $res_banner_id;
                         $this->tpl_onload = "alert('登録が完了しました。');";
+
+                        if($mode === 'edit'){
+                            //1, tmp_dir['tmp_dir => '/var/www/html/html/upload/temp_image/' 2, id]
+                            $this->lfSaveUploadFiles($objUpFile, $banner_id);
+                        }
+
                     }
                 }
                 // POSTデータを引き継ぐ
                 $this->tpl_banner_id = $banner_id;
+
                 break;
 
             case 'pre_edit':
@@ -137,6 +147,21 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
             case 'delete':
                 //----　データ削除
                 $objBanner->deleteBanner($banner_id);
+
+                $arrParam = $objFormParam->getHashArray();
+                $banner = $objBanner->getBanner($arrParam['id']);
+                $save_image_url = $_SERVER['DOCUMENT_ROOT'] . '/html/upload/save_image/';
+                $result = glob($save_image_url . '*');
+
+                if(in_array($save_image_url . $banner['main_list_image'], $result)){
+                    foreach($result as $image){
+                        if($image === $save_image_url . $banner['main_list_image']){
+                            unlink($image);
+                        }
+                    }
+                }
+
+
                 //自分にリダイレクト（再読込による誤動作防止）
                 SC_Response_Ex::reload();
                 break;
@@ -177,21 +202,27 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
         $this->line_max = count($this->arrBanner);
 
         $this->arrForm = $objFormParam->getFormParamList();
+
         if($mode === 'pre_edit'){
             if($banner['main_list_image']){
                 $this->arrForm['arrFile'] = ['main_list_image', $banner['main_list_image']];
-                $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/temp_image/' . $banner['main_list_image'];
+                $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/save_image/' . $banner['main_list_image'];
             }else{
                 $this->arrForm['arrFile']['main_list_image']['filepath'] = '';
             }
+            $this->arrForm['arrHidden'] = $banner['main_list_image'];
         }
         if($mode === 'edit'){
             if($arrParam['temp_main_list_image']){
                 $this->arrForm['arrFile'] = ['temp_main_list_image', $arrParam['temp_main_list_image']];
-                $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/temp_image/' . $arrParam['temp_main_list_image'];
+                $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/save_image/' . $arrParam['temp_main_list_image'];
+            }elseif($arrParam['main_list_image']){
+                $this->arrForm['arrFile'] = ['temp_main_list_image', $arrParam['main_list_image']];
+                $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/save_image/' . $arrParam['main_list_image'];
             }else{
                 $this->arrForm['arrFile']['main_list_image']['filepath'] = '';
             }
+            $this->arrForm['arrHidden'] = $arrParam['temp_main_list_image'];
         }
 //
 
@@ -294,9 +325,10 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
         $sqlval['banner_select'] = $this->checkLinkMethod($sqlval['banner_select']);
         if (strlen($sqlval['temp_main_list_image']) > 0) {
             $sqlval['main_list_image'] = $sqlval['temp_main_list_image'];
-        } else {
-            $sqlval['main_list_image'] = $sqlval['save_main_list_image'];
         }
+//        else {
+//            $sqlval['main_list_image'] = $sqlval['save_main_list_image'];
+//        }
 
         return $objBanner->saveBanner($sqlval);
     }
@@ -549,32 +581,7 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
         $objFormParam->addParam('temp_main_image', 'temp_main_image', '', '', array());
         $objFormParam->addParam('temp_main_large_image', 'temp_main_large_image', '', '', array());
 
-//        for ($cnt = 1; $cnt <= PRODUCTSUB_MAX; $cnt++) {
-//            $objFormParam->addParam('詳細-サブタイトル' . $cnt, 'sub_title' . $cnt, STEXT_LEN, 'KVa', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
-//            $objFormParam->addParam('詳細-サブコメント' . $cnt, 'sub_comment' . $cnt, LLTEXT_LEN, 'KVa', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
-//            $objFormParam->addParam('save_sub_image' . $cnt, 'save_sub_image' . $cnt, '', '', array());
-//            $objFormParam->addParam('save_sub_large_image' . $cnt, 'save_sub_large_image' . $cnt, '', '', array());
-//            $objFormParam->addParam('temp_sub_image' . $cnt, 'temp_sub_image' . $cnt, '', '', array());
-//            $objFormParam->addParam('temp_sub_large_image' . $cnt, 'temp_sub_large_image' . $cnt, '', '', array());
-//            //ここから 2020/1/23
-//            $objFormParam->addParam('注意書き', 'comment7', STEXT_LEN, 'KVa', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
-//            $objFormParam->addParam('プレゼント包装の可否', 'pre_flg', STEXT_LEN, 'n', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
-////            ここまで項目追加
-////            ここから 2020/1/24
-//            $objFormParam->addParam('原材料', 'material', SMTEXT_LEN, 'KVa', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
-////            ここまで項目追加
-//        }
 //
-//        for ($cnt = 1; $cnt <= RECOMMEND_PRODUCT_MAX; $cnt++) {
-//            $objFormParam->addParam('関連商品コメント' . $cnt, 'recommend_comment' . $cnt, LTEXT_LEN, 'KVa', array('SPTAB_CHECK', 'MAX_LENGTH_CHECK'));
-//            $objFormParam->addParam('関連商品ID' . $cnt, 'recommend_id' . $cnt, INT_LEN, 'n', array('NUM_CHECK', 'MAX_LENGTH_CHECK'));
-//            $objFormParam->addParam('recommend_delete' . $cnt, 'recommend_delete' . $cnt, '', 'n', array());
-//        }
-//
-//        $objFormParam->addParam('商品ID', 'copy_product_id', INT_LEN, 'n', array('NUM_CHECK', 'MAX_LENGTH_CHECK'));
-//
-//        $objFormParam->addParam('has_product_class', 'has_product_class', INT_LEN, 'n', array('NUM_CHECK', 'MAX_LENGTH_CHECK'));
-//        $objFormParam->addParam('product_class_id', 'product_class_id', INT_LEN, 'n', array('NUM_CHECK', 'MAX_LENGTH_CHECK'));
 
         $objFormParam->setParam($arrPost);
         $objFormParam->convParam();
@@ -765,6 +772,30 @@ __EOF__;
             } else {
                 $objUpFile->temp_file[$key] = '';
                 $objUpFile->save_file[$key] = '';
+            }
+        }
+    }
+
+
+
+    public function lfSaveUploadFiles(&$objUpFile, $product_id)
+    {
+        // TODO: SC_UploadFile::moveTempFileの画像削除条件見直し要
+        $objImage = new SC_Image_Ex($objUpFile->temp_dir);
+        $arrKeyName = $objUpFile->keyname;
+        $arrTempFile = $objUpFile->temp_file;
+        $arrSaveFile = $objUpFile->save_file;
+        $arrImageKey = array();
+        foreach ($arrTempFile as $key => $temp_file) {
+            if ($temp_file) {
+                $objImage->moveTempImage($temp_file, $objUpFile->save_dir);
+                $arrImageKey[] = $arrKeyName[$key];
+                if (!empty($arrSaveFile[$key])
+                    && !$this->lfHasSameProductImage($product_id, $arrImageKey, $arrSaveFile[$key])
+                    && !in_array($temp_file, $arrSaveFile)
+                ) {
+                    $objImage->deleteImage($arrSaveFile[$key], $objUpFile->save_dir);
+                }
             }
         }
     }

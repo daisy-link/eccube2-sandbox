@@ -45,7 +45,7 @@
                 <!--{/if}-->
                 <!--{/if}-->
                 >
-                <img src="<!--{$smarty.const.IMAGE_TEMP_URLPATH}--><!--{$banner.main_list_image|sfNoImageMainList|h}-->"
+                <img src="<!--{$smarty.const.IMAGE_SAVE_URLPATH}--><!--{$banner.main_list_image|sfNoImageMainList|h}-->"
                      alt="<!--{$arrProduct.name|h}-->" class="picture"/>
                 </a>
             </div>

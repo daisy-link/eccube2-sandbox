@@ -197,7 +197,7 @@ class LC_Page_Admin_Contents extends LC_Page_Admin_Ex
      * @param  SC_Helper_News_Ex   $objNews
      * @return multiple
      */
-    public function doRegist($news_id, $sqlval, SC_Helper_News_Ex $objNews)
+    public function   doRegist($news_id, $sqlval, SC_Helper_News_Ex $objNews)
     {
         $sqlval['news_id'] = $news_id;
         $sqlval['creator_id'] = $_SESSION['member_id'];
