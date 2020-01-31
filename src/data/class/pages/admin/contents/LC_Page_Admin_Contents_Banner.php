@@ -469,12 +469,12 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
         $has_subproduct_data = false;
 
         for ($i = 1; $i <= PRODUCTSUB_MAX; $i++) {
-            if (SC_Utils_Ex::isBlank($arrSubProductData['sub_title' . $i]) == false
-                || SC_Utils_Ex::isBlank($arrSubProductData['sub_comment' . $i]) == false
-                || SC_Utils_Ex::isBlank($arrSubProductData['sub_image' . $i]) == false
-                || SC_Utils_Ex::isBlank($arrSubProductData['sub_large_image' . $i]) == false
-                || SC_Utils_Ex::isBlank($arrSubProductData['temp_sub_image' . $i]) == false
-                || SC_Utils_Ex::isBlank($arrSubProductData['temp_sub_large_image' . $i]) == false
+            if (SC_Utils_Ex::isBlank($arrSubProductData['sub_title' . $i])
+                || SC_Utils_Ex::isBlank($arrSubProductData['sub_comment' . $i])
+                || SC_Utils_Ex::isBlank($arrSubProductData['sub_image' . $i])
+                || SC_Utils_Ex::isBlank($arrSubProductData['sub_large_image' . $i])
+                || SC_Utils_Ex::isBlank($arrSubProductData['temp_sub_image' . $i])
+                || SC_Utils_Ex::isBlank($arrSubProductData['temp_sub_large_image' . $i])
             ) {
                 $has_subproduct_data = true;
                 break;
