@@ -107,7 +107,9 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
                     // POST値の引き継ぎ
                     $arrParam = $objFormParam->getHashArray();
                     $banner = $objBanner->getBanner($arrParam['id']);
-                    $arrParam['main_list_image'] = $banner['main_list_image'];
+                    if($_POST['temp_main_list_image']){
+                        $arrParam['main_list_image'] = $banner['main_list_image'];
+                    }
 //                    $save_dir = $_SERVER['DOCUMENT_ROOT'] . '/html/upload/save_image/';
                     // 登録実行
                     $res_banner_id = $this->doRegist($banner_id, $arrParam, $objBanner);

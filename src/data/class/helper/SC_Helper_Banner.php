@@ -33,8 +33,8 @@ class SC_Helper_Banner
     /**
      * ニュースの情報を取得.
      *
-     * @param  integer $news_id     ニュースID
-     * @param  boolean $has_deleted 削除されたニュースも含む場合 true; 初期値 false
+     * @param integer $news_id ニュースID
+     * @param boolean $has_deleted 削除されたニュースも含む場合 true; 初期値 false
      * @return array
      */
     public function getBanner($banner_id, $has_deleted = false)
@@ -50,17 +50,16 @@ class SC_Helper_Banner
         return $arrRet[0];
     }
 
-    public function getBannerEdit($banner_id){
-
-
+    public function getBannerEdit($banner_id)
+    {
     }
 
     /**
      * ニュース一覧の取得.
      *
-     * @param  integer $dispNumber  表示件数
-     * @param  integer $pageNumber  ページ番号
-     * @param  boolean $has_deleted 削除されたニュースも含む場合 true; 初期値 false
+     * @param integer $dispNumber 表示件数
+     * @param integer $pageNumber ページ番号
+     * @param boolean $has_deleted 削除されたニュースも含む場合 true; 初期値 false
      * @return array
      */
     public function getList($dispNumber = 0, $pageNumber = 0, $has_deleted = false)
@@ -89,7 +88,7 @@ class SC_Helper_Banner
     /**
      * ニュースの登録.
      *
-     * @param  array    $sqlval
+     * @param array $sqlval
      * @return multiple 登録成功:ニュースID, 失敗:FALSE
      */
     public function saveBanner($sqlval)
@@ -113,16 +112,29 @@ class SC_Helper_Banner
 //            unset($sqlval['create_date']);
             $where = 'id = ?';
 //            $banner_id = $objQuery->max('id', 'dtb_banners');
+            $banner_old_image = $this->getBanner($banner_id);
+
             $ret = $objQuery->update('dtb_banners', $sqlval, $where, array($banner_id));
+            if ($banner_old_image['main_list_image'] !== $sqlval['main_list_image']) {
+                $save_image_url = $_SERVER['DOCUMENT_ROOT'] . '/html/upload/save_image/';
+                $result = glob($save_image_url . '*');
+                if (in_array($save_image_url . $banner_old_image['main_list_image'], $result)) {
+                    foreach ($result as $image) {
+                        if ($image === $save_image_url . $banner_old_image['main_list_image']) {
+                            unlink($image);
+                        }
+                    }
+                }
+            }
         }
 
-        return ($ret) ? $sqlval['id'] : FALSE;
+        return ($ret) ? $sqlval['id'] : false;
     }
 
     /**
      * ニュースの削除.
      *
-     * @param  integer $news_id ニュースID
+     * @param integer $news_id ニュースID
      * @return void
      */
     public function deleteBanner($banner_id)
@@ -135,7 +147,7 @@ class SC_Helper_Banner
     /**
      * ニュースの表示順をひとつ上げる.
      *
-     * @param  integer $news_id ニュースID
+     * @param integer $news_id ニュースID
      * @return void
      */
     public function rankUp($banner_id)
@@ -147,7 +159,7 @@ class SC_Helper_Banner
     /**
      * ニュースの表示順をひとつ下げる.
      *
-     * @param  integer $news_id ニュースID
+     * @param integer $news_id ニュースID
      * @return void
      */
     public function rankDown($banner_id)
@@ -159,8 +171,8 @@ class SC_Helper_Banner
     /**
      * ニュースの表示順を指定する.
      *
-     * @param  integer $news_id ニュースID
-     * @param  integer $rank    移動先の表示順
+     * @param integer $news_id ニュースID
+     * @param integer $rank 移動先の表示順
      * @return void
      */
     public function moveRank($banner_id, $rank)
@@ -172,7 +184,7 @@ class SC_Helper_Banner
     /**
      * ニュース記事数を計算.
      *
-     * @param  boolean $has_deleted 削除されたニュースも含む場合 true; 初期値 false
+     * @param boolean $has_deleted 削除されたニュースも含む場合 true; 初期値 false
      * @return integer ニュース記事数
      */
     public function getCount($has_deleted = false)
