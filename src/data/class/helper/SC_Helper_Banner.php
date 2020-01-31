@@ -37,7 +37,7 @@ class SC_Helper_Banner
      * @param  boolean $has_deleted 削除されたニュースも含む場合 true; 初期値 false
      * @return array
      */
-    public static function getBanner($banner_id, $has_deleted = false)
+    public function getBanner($banner_id, $has_deleted = false)
     {
         $objQuery =& SC_Query_Ex::getSingletonInstance();
         $col = '*';
@@ -50,7 +50,7 @@ class SC_Helper_Banner
         return $arrRet[0];
     }
 
-    public static function getBannerEdit($banner_id){
+    public function getBannerEdit($banner_id){
 
 
     }
