@@ -620,7 +620,6 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
     public function lfCheckError_Edit(&$objFormParam, &$objUpFile, &$objDownFile, $arrForm)
     {
         $objErr = new SC_CheckError_Ex($arrForm);
-        $arrErr = array();
 
         // 入力パラメーターチェック
         $arrErr = $objFormParam->checkError();
@@ -657,8 +656,6 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
 
     public function lfGetFormParam_PreEdit(&$objUpFile, &$objDownFile, $product_id)
     {
-        $arrForm = array();
-
         // DBから商品データ取得
         $arrForm = $this->lfGetProductData_FromDB($product_id);
         // DBデータから画像ファイル名の読込
