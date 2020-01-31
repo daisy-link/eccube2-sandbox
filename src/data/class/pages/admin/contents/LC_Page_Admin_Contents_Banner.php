@@ -206,7 +206,7 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
 
         if($mode === 'pre_edit'){
             if($banner['main_list_image']){
-                $this->arrForm['arrFile'] = ['main_list_image', $banner['main_list_image']];
+                $this->arrForm['arrFile'] = array('main_list_image', $banner['main_list_image']);
                 $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/save_image/' . $banner['main_list_image'];
             }else{
                 $this->arrForm['arrFile']['main_list_image']['filepath'] = '';
@@ -215,10 +215,10 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
         }
         if($mode === 'edit'){
             if($arrParam['temp_main_list_image']){
-                $this->arrForm['arrFile'] = ['temp_main_list_image', $arrParam['temp_main_list_image']];
+                $this->arrForm['arrFile'] = array('temp_main_list_image', $arrParam['temp_main_list_image']);
                 $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/save_image/' . $arrParam['temp_main_list_image'];
             }elseif($arrParam['main_list_image']){
-                $this->arrForm['arrFile'] = ['temp_main_list_image', $arrParam['main_list_image']];
+                $this->arrForm['arrFile'] = array('temp_main_list_image', $arrParam['main_list_image']);
                 $this->arrForm['arrFile']['main_list_image']['filepath'] = '/html/upload/save_image/' . $arrParam['main_list_image'];
             }else{
                 $this->arrForm['arrFile']['main_list_image']['filepath'] = '';
