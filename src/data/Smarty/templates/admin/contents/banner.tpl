@@ -97,16 +97,16 @@
                 <th>タイトル<span class="attention"> *</span></th>
                 <td>
                     <!--{if $arrErr.banner_title}--><span class="attention"><!--{$arrErr.banner_title}--></span><!--{/if}-->
-                    <textarea name="banner_title" cols="60" rows="2" class="area62" maxlength="<!--{$smarty.const.MTEXT_LEN}-->" <!--{if $arrErr.banner_title}-->style="background-color:<!--{$smarty.const.ERR_COLOR|h}-->"<!--{/if}-->><!--{"\n"}--><!--{$arrForm.banner_title.value|h}--></textarea><br />
-                    <span class="attention"> (上限<!--{$smarty.const.MTEXT_LEN}-->文字)</span>
+                    <textarea name="banner_title" cols="60" rows="2" class="area62" maxlength="<!--{$arrForm.banner_title.length}-->" <!--{if $arrErr.banner_title}-->style="background-color:<!--{$smarty.const.ERR_COLOR|h}-->"<!--{/if}-->><!--{"\n"}--><!--{$arrForm.banner_title.value|h}--></textarea><br />
+                    <span class="attention"> (上限<!--{$arrForm.banner_title.length}-->文字)</span>
                 </td>
             </tr>
             <tr>
                 <th>URL</th>
                 <td>
                     <span class="attention"><!--{$arrErr.banner_url}--></span>
-                    <input type="text" name="banner_url" size="60" class="box60"    value="<!--{$arrForm.banner_url.value|h}-->" <!--{if $arrErr.banner_url}-->style="background-color:<!--{$smarty.const.ERR_COLOR|h}-->"<!--{/if}--> maxlength="<!--{$smarty.const.URL_LEN}-->" />
-                    <span class="attention"> (上限<!--{$smarty.const.URL_LEN}-->文字)</span>
+                    <input type="text" name="banner_url" size="60" class="box60"    value="<!--{$arrForm.banner_url.value|h}-->" <!--{if $arrErr.banner_url}-->style="background-color:<!--{$smarty.const.ERR_COLOR|h}-->"<!--{/if}--> maxlength="<!--{$arrForm.banner_url.length}-->" />
+                    <span class="attention"> (上限<!--{$arrForm.banner_url.length}-->文字)</span>
                 </td>
             </tr>
             <tr>
@@ -133,7 +133,7 @@
                 <th>テキスト</th>
                 <td>
                     <!--{if $arrErr.banner_text}--><span class="attention"><!--{$arrErr.banner_text}--></span><!--{/if}-->
-                    <textarea name="banner_text" cols="60" rows="8" wrap="soft" class="area60" maxlength="<!--{$smarty.const.LTEXT_LEN}-->" style="background-color:<!--{if $arrErr.banner_text}--><!--{$smarty.const.ERR_COLOR|h}--><!--{/if}-->"><!--{"\n"}--><!--{$arrForm.banner_text.value|h}--></textarea><br />
+                    <textarea name="banner_text" cols="60" rows="8" wrap="soft" class="area60" maxlength="<!--{$arrForm.banner_text.length}-->" style="background-color:<!--{if $arrErr.banner_text}--><!--{$smarty.const.ERR_COLOR|h}--><!--{/if}-->"><!--{"\n"}--><!--{$arrForm.banner_text.value|h}--></textarea><br />
                     <span class="attention"> (上限3000文字)</span>
                 </td>
             </tr>
