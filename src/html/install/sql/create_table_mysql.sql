@@ -1251,6 +1251,7 @@ ALTER TABLE dtb_products ADD material TEXT;
 
 -- 2020/1/31
 CREATE TABLE dtb_banners (
+--     id int NOT NULL PRIMARY KEY,
     id int NOT NULL,
     banner_title varchar(255) NOT NULL,
     banner_text text,
@@ -1261,3 +1262,5 @@ CREATE TABLE dtb_banners (
     del_flg smallint NOT NULL DEFAULT 0,
     main_list_image text
 );
+
+ALTER TABLE dtb_banners ADD PRIMARY KEY (id);
