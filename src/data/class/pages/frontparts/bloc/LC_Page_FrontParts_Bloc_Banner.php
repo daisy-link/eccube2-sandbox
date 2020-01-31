@@ -25,7 +25,7 @@ define('CALENDAR_ROOT', DATA_REALDIR.'module/Calendar'.DIRECTORY_SEPARATOR);
 require_once CLASS_EX_REALDIR . 'page_extends/frontparts/bloc/LC_Page_FrontParts_Bloc_Ex.php';
 
 /**
- * Calendar のページクラス.
+ * Banner のページクラス.
  *
  * @package Page
  * @author LOCKON CO.,LTD.
@@ -65,7 +65,8 @@ class LC_Page_FrontParts_Bloc_Banner extends LC_Page_FrontParts_Bloc_Ex
         // バナー情報取得
         $this->banner = $this->lfGetBanner();
         // バナー画像保存先url取得
-        $this->banner_image_url = lfGetImageUrl();
+//        $this->banner_image_url = lfGetImageUrl();
+//        $this->banner_image = '/html/upload/temp_image/' . $this->banner['main_list_image'];
     }
 
     /**
@@ -86,14 +87,19 @@ class LC_Page_FrontParts_Bloc_Banner extends LC_Page_FrontParts_Bloc_Ex
             $banner = $this->banner;
         }else{
             $banner = 'バナーの情報が登録されていません。';
-            return $banner;
         }
         return $banner;
     }
 
-    public function lfGetImageUrl(){
-        $url = '/html/';
-    }
+//    public function lfGetImageUrl(){
+//        $banner = new SC_Query;
+//        $banner->setOrder('rank DESC');
+//        $this->banner = $banner->select('*', 'dtb_banners');
+//        if($this->banner){
+//            $banner_image = $this->banner
+//        }
+//        $url = '/html/upload/temp_image';
+//    }
 }
 
 

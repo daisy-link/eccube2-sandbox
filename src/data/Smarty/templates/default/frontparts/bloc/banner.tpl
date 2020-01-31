@@ -20,6 +20,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *}-->
 
+<ul>
+    {for $foo=1 to 3}
+        <li>{$foo}</li>
+    {/for}
+</ul>
+
 <!--{strip}-->
 <div class="block_outer">
     <div id="news_area">
@@ -27,17 +33,23 @@
 
         <div class="block_body">
             <!--{if is_array($banner)}-->
-            <!--{foreach from=$banner item=banner}-->
+            <!--{foreach from=$banner item=banner name=myloop}-->
+            <!--{if $smarty.foreach.myloop.index < 5 }-->
+
+
             <div class="banner_contents">
+                <!--{$banner.banner_title|h|nl2br}-->
                 <a
                 <!--{if $banner.banner_url}--> href="<!--{$banner.banner_url}--> "
                 <!--{if $banner.banner_select eq "2"}--> target="_blank"
                 <!--{/if}-->
                 <!--{/if}-->
                 >
-                <!--{$banner.banner_title|h|nl2br}--></a>
-                <p><!--{$banner.banner_text}--></p>
+                <img src="<!--{$smarty.const.IMAGE_TEMP_URLPATH}--><!--{$banner.main_list_image|sfNoImageMainList|h}-->"
+                     alt="<!--{$arrProduct.name|h}-->" class="picture"/>
+                </a>
             </div>
+            <!--{/if}-->
             <!--{/foreach}-->
             <!--{else}-->
             <!--{$banner}-->

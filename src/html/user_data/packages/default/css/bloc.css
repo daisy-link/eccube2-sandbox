@@ -421,3 +421,13 @@ ul.button_like li a {
 .side_column #recommend_area .block_body .productContents {
     clear: both;
 }
+
+.banner_contents {
+    border-bottom: solid 1px gray;
+    height: 60px;
+    width: 100%;
+}
+.banner_contents img{
+    height: 50px;
+    /*width: 100%;*/
+}
