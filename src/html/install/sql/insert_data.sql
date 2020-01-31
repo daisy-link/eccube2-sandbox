@@ -1547,3 +1547,8 @@ INSERT INTO mtb_country (id, name, rank) VALUES (422,'レバノン',247);
 INSERT INTO mtb_country (id, name, rank) VALUES (638,'レユニオン',248);
 INSERT INTO mtb_country (id, name, rank) VALUES (643,'ロシア|ロシア連邦',249);
 
+--2020/1/31
+INSERT INTO dtb_bloc
+(device_type_id, bloc_id, bloc_name, tpl_path, filename, create_date, update_date, php_path, deletable_flg)
+SELECT 10, MAX(bloc_id) + 1, 'バナー', 'banner.tpl', 'banner', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'frontparts/bloc/banner.php', 0 FROM dtb_bloc
+WHERE device_type_id = 10;

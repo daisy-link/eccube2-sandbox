@@ -1248,3 +1248,16 @@ ALTER TABLE dtb_products ADD pre_flg TEXT;
 
 -- 2020/1/24
 ALTER TABLE dtb_products ADD material TEXT;
+
+-- 2020/1/31
+CREATE TABLE dtb_banners (
+    id int NOT NULL,
+    banner_title varchar(255) NOT NULL,
+    banner_text text,
+    banner_select text NOT NULL,
+    banner_url text,
+    rank int,
+    creator_id int,
+    del_flg smallint NOT NULL DEFAULT 0,
+    main_list_image text
+);

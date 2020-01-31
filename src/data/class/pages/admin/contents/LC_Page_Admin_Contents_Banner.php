@@ -153,6 +153,7 @@ class LC_Page_Admin_Contents_Banner extends LC_Page_Admin_Ex
                 $save_image_url = $_SERVER['DOCUMENT_ROOT'] . '/html/upload/save_image/';
                 $result = glob($save_image_url . '*');
 
+                //save_image内のデータ削除
                 if(in_array($save_image_url . $banner['main_list_image'], $result)){
                     foreach($result as $image){
                         if($image === $save_image_url . $banner['main_list_image']){
